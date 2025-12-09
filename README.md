@@ -37,13 +37,12 @@ You can also connect to VM with *ssh*:
 
 ```sh
 $ ./ssh-enter-vm.sh
-$ ....
 ```
 
 I start by installing the quadlet files present in `./quadlets`:
 
 ```sh
-$ podman quadlet install ./quadlets/
+stephane@stephane-coreos:/mnt/shared$ podman quadlet install ./quadlets/
 /var/home/stephane/.config/containers/systemd/mynetwork.network
 /var/home/stephane/.config/containers/systemd/postgresql.container
 /var/home/stephane/.config/containers/systemd/adminer.container
@@ -52,7 +51,7 @@ $ podman quadlet install ./quadlets/
 This `podman` command generates the following Systemd units:
 
 ```
-$ ls -1 /run/user/1001/systemd/generator/
+stephane@stephane-coreos:/mnt/shared$ ls -1 /run/user/1001/systemd/generator/
 adminer.service
 default.target.wants
 mynetwork-network.service
@@ -62,7 +61,7 @@ postgresql.service
 I can see that a systemd unit `postgresql.service` is created but not started:
 
 ```
-$ systemctl --user status postgresql.service
+stephane@stephane-coreos:/mnt/shared$ systemctl --user status postgresql.service
 ○ postgresql.service
      Loaded: loaded (/var/home/stephane/.config/containers/systemd/postgresql.container; generated)
     Drop-In: /usr/lib/systemd/user/service.d
@@ -73,14 +72,14 @@ $ systemctl --user status postgresql.service
 I start the services:
 
 ```
-$ systemctl --user start postgresql.service
-$ systemctl --user start adminer.service
+stephane@stephane-coreos:/mnt/shared$ systemctl --user start postgresql.service
+stephane@stephane-coreos:/mnt/shared$ systemctl --user start adminer.service
 ```
 
 Wait container image pulling and starting...
 
 ```
-$ podman ps
+stephane@stephane-coreos:/mnt/shared$ podman ps
 CONTAINER ID  IMAGE                            COMMAND               CREATED                 STATUS                 PORTS                   NAMES
 65ab19ec4148  docker.io/library/postgres:18    postgres              5 seconds ago           Up 4 seconds           0.0.0.0:5432->5432/tcp  systemd-postgresql
 e8c003e34e44  docker.io/library/adminer:5.4.1  php -S [::]:8080 ...  Less than a second ago  Up Less than a second  0.0.0.0:8080->8080/tcp  systemd-adminer
@@ -104,7 +103,7 @@ Here's an important concept I initially struggled with when working with Podman 
 When trying to enable automatic container startup at boot, I attempted to run the following command and encountered an error:
 
 ```sh
-$ systemctl --user enable postgresql.service
+stephane@stephane-coreos:/mnt/shared$ systemctl --user enable postgresql.service
 Failed to enable unit: Unit /run/user/1001/systemd/generator/postgresql.service is transient or generated  
 ```
 
@@ -123,6 +122,6 @@ WantedBy=default.target
 but, if needed, you can configure manually:
 
 ```
-$ sudo mkdir -p /mnt/shared
-$ sudo mount -t 9p -o trans=virtio shared /mnt/shared
+stephane@stephane-coreos:/mnt/shared$ sudo mkdir -p /mnt/shared
+stephane@stephane-coreos:/mnt/shared$ sudo mount -t 9p -o trans=virtio shared /mnt/shared
 ```
