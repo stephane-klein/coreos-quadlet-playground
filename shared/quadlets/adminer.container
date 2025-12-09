@@ -1,0 +1,7 @@
+[Container]
+Image=docker.io/adminer:5.4.1
+PublishPort=8080:8080
+Network=mynetwork.network
+
+[Install]
+WantedBy=default.target

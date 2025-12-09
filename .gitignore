@@ -1,0 +1,5 @@
+disks/
+images/
+.aider.*
+coreos-custom-iso-config.ign
+.aider*

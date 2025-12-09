@@ -1,0 +1,12 @@
+[Container]
+Image=docker.io/postgres:18
+AutoUpdate=registry
+PublishPort=5432:5432
+Environment=POSTGRES_PASSWORD=password
+Network=mynetwork.network
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
